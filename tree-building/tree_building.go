@@ -1,7 +1,5 @@
 package treebuilding
 
-import "sort"
-
 type Record struct {
 	ID     int
 	Parent int
@@ -19,30 +17,12 @@ func Build(records []Record) (*Node, error) {
 		return nil, nil
 	}
 
-	tree := Node{ID: 0}
-
-	if len(records) == 1 {
-		return &tree, nil
-	}
-
-	directParent := 0
+	allNodes := make([]*Node, len(records))
 
 	for _, r := range records {
-		if r.Parent > 0 {
-
-		}
-		if tree.ID != r.ID {
-			tree.Children = appendAndSort(&tree, r)
-		}
+		allNodes[r.ID] = &Node{ID: r.ID}
 	}
-	return &tree, nil
 
-}
+	return allNodes[0], nil
 
-func appendAndSort(n *Node, r Record) []*Node {
-	n.Children = append(n.Children, &Node{ID: r.ID})
-	sort.Slice(n.Children, func(i int, j int) bool {
-		return n.Children[i].ID < n.Children[j].ID
-	})
-	return n.Children
 }
