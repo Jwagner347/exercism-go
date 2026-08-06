@@ -1,5 +1,9 @@
 package treebuilding
 
+import (
+	"errors"
+)
+
 type Record struct {
 	ID     int
 	Parent int
@@ -14,6 +18,7 @@ type Node struct {
 }
 
 func Build(records []Record) (*Node, error) {
+	var err error
 	if len(records) == 0 {
 		return nil, nil
 	}
@@ -21,6 +26,15 @@ func Build(records []Record) (*Node, error) {
 	allNodes := make([]*Node, len(records))
 
 	for _, r := range records {
+		if r.ID >= len(records) || r.Parent >= len(records) {
+			err = errors.New("Invalid records")
+			return nil, err
+		}
+
+		if r.Parent > r.ID {
+			err = errors.New("Cannot have ParentID greater than ID")
+			return nil, err
+		}
 		allNodes[r.ID] = &Node{ID: r.ID, ParentID: r.Parent}
 	}
 
@@ -31,6 +45,6 @@ func Build(records []Record) (*Node, error) {
 
 	}
 
-	return allNodes[0], nil
+	return allNodes[0], err
 
 }
