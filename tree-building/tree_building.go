@@ -31,6 +31,11 @@ func Build(records []Record) (*Node, error) {
 			return nil, err
 		}
 
+		if r.Parent == r.ID && r.ID != 0 {
+			err = errors.New("Only root node can be its own parent")
+			return nil, err
+		}
+
 		if r.Parent > r.ID {
 			err = errors.New("Cannot have ParentID greater than ID")
 			return nil, err
