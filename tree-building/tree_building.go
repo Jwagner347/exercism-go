@@ -18,7 +18,6 @@ type Node struct {
 }
 
 func Build(records []Record) (*Node, error) {
-	var err error
 	if len(records) == 0 {
 		return nil, nil
 	}
@@ -27,23 +26,19 @@ func Build(records []Record) (*Node, error) {
 
 	for _, r := range records {
 		if r.ID >= len(records) || r.Parent >= len(records) {
-			err = errors.New("Invalid records")
-			return nil, err
+			return nil, errors.New("Invalid records")
 		}
 
 		if r.Parent == r.ID && r.ID != 0 {
-			err = errors.New("Only root node can be its own parent")
-			return nil, err
+			return nil, errors.New("Only root node can be its own parent")
 		}
 
 		if r.Parent > r.ID {
-			err = errors.New("Cannot have ParentID greater than ID")
-			return nil, err
+			return nil, errors.New("Cannot have ParentID greater than ID")
 		}
 
 		if allNodes[r.ID] != nil {
-			err = errors.New("already indexed on this record")
-			return nil, err
+			return nil, errors.New("already indexed on this record")
 		}
 		allNodes[r.ID] = &Node{ID: r.ID, ParentID: r.Parent}
 	}
@@ -55,6 +50,6 @@ func Build(records []Record) (*Node, error) {
 
 	}
 
-	return allNodes[0], err
+	return allNodes[0], nil
 
 }
