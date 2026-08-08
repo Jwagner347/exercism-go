@@ -35,6 +35,11 @@ func Build(records []Record) (*Node, error) {
 			err = errors.New("Cannot have ParentID greater than ID")
 			return nil, err
 		}
+
+		if allNodes[r.ID] != nil {
+			err = errors.New("already indexed on this record")
+			return nil, err
+		}
 		allNodes[r.ID] = &Node{ID: r.ID, ParentID: r.Parent}
 	}
 
