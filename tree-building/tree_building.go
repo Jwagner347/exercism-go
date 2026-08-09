@@ -28,12 +28,10 @@ func Build(records []Record) (*Node, error) {
 		if r.ID >= len(records) || r.Parent >= len(records) {
 			return nil, errors.New("Invalid records")
 		}
+		isRoot := r.ID == 0 && r.Parent == 0
+		isOwnParent := r.ID == r.Parent
 
-		if r.Parent == r.ID && r.ID != 0 {
-			return nil, errors.New("Only root node can be its own parent")
-		}
-
-		if r.Parent > r.ID {
+		if !isRoot && (isOwnParent || r.ID <= r.Parent) {
 			return nil, errors.New("Cannot have ParentID greater than ID")
 		}
 
